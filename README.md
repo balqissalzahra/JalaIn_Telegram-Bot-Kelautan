@@ -41,9 +41,9 @@ Bot ini dibuat sebagai bagian dari **Tugas Akhir Bootcamp Sanbercode Batch 5** d
 - **BMKG Public API**: Cuaca maritim real-time
 
 ### 2. Struktur Data
-- `data/data_ikan.db`: Statistik perikanan
-- `maritim_chroma/`: Vektor data cuaca
-- `data penting/`: Berisi JSON & FAISS index (tidak diunggah ke GitHub)
+- `data/data_ikan.db`: Statistik perikanan (disimpan lokal)
+- `maritim_chroma/`: Embedding vektor dari data jenis ikan dan regulasi (ChromaDB)
+- `.env`: Token & API key disimpan secara lokal (tidak diunggah ke repo)
 
 ---
 
@@ -53,3 +53,35 @@ Bot ini dibuat sebagai bagian dari **Tugas Akhir Bootcamp Sanbercode Batch 5** d
 ```bash
 git clone https://github.com/balqissalzahra/JalaIn_Telegram-Bot-Kelautan.git
 cd JalaIn_Telegram-Bot-Kelautan
+```
+
+### 2. Buat Virtual Environment & Install Dependencies
+```bash
+python -m venv rag_env
+rag_env\Scripts\activate         # Windows
+pip install -r requirements.txt
+```
+
+### 3. Siapkan File `.env`
+Buat file `.env` berdasarkan `.env.example` dan isi dengan:
+```env
+TELEGRAM_BOT_TOKEN=your-telegram-token
+GOOGLE_API_KEY=your-gemini-api-key
+```
+
+### 4. Jalankan Bot
+```bash
+python bot/main_bot.py
+```
+
+---
+
+## 👩‍💻 Kontributor
+
+Balqis Alzahra — Tugas Akhir Bootcamp Sanbercode Batch 5
+
+---
+
+## 📎 Lisensi
+
+Proyek ini didistribusikan untuk keperluan edukasi.
