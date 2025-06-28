@@ -1,0 +1,21 @@
+# 🐍 Python & Environment
+__pycache__/
+*.pyc
+rag_env/
+.env
+.env.*
+
+# 📁 Data besar & sensitif
+data/
+maritim_chroma/
+*.json
+*.db
+*.faiss
+*.xlsx
+
+# Notebook autosave
+*.ipynb_checkpoints/
+
+# Sistem
+.DS_Store
+Thumbs.db
