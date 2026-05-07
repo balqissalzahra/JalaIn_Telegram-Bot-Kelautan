@@ -1,34 +1,32 @@
-# 🌊 JalaIn — Telegram Bot Informasi Kelautan & Perikanan Indonesia
+# 🌊 JalaIn — AI-Powered Marine & Fisheries Information Bot
 
-**JalaIn** adalah bot Telegram berbasis AI dan data resmi pemerintah yang dirancang untuk memudahkan akses informasi sektor kelautan dan perikanan di Indonesia. Bot ini menyajikan data statistik, cuaca maritim, serta informasi tentang jenis ikan dan regulasi perikanan secara cepat, akurat, dan humanis.
+> **Democratizing access to Indonesia's marine sector data through conversational AI**
 
----
-
-## 🎓 Tugas Akhir Bootcamp Sanbercode
-
-Proyek ini merupakan **Tugas Akhir Bootcamp Sanbercode Batch 5**, dikembangkan oleh **Balqis Alzahra** untuk mendemonstrasikan integrasi teknologi AI, data terbuka pemerintah, dan antarmuka percakapan melalui Telegram Bot.
+JalaIn is a Python-based Telegram bot that integrates Retrieval-Augmented Generation (RAG), real-time maritime weather data, and a structured fisheries database — enabling public users, researchers, and policymakers to query complex marine information through natural language.
 
 ---
 
-## 🎯 Tujuan Pembuatan
-
-- Meningkatkan literasi data dan keterbukaan informasi publik sektor kelautan dan perikanan.
-- Menyediakan satu pintu akses data: statistik, cuaca, dan regulasi.
-- Mengintegrasikan AI (Retrieval-Augmented Generation) untuk menjawab pertanyaan publik.
+## 📸 Demo
+![JalaIn Demo](JalaIn%20Telegram%20Bot.gif)
 
 ---
 
-## ⚙️ Fitur Utama
+## 🎯 Problem & Motivation
 
-| Perintah Telegram | Fungsi |
-|-------------------|--------|
-| `/start`          | Informasi pengantar bot |
-| `/cuaca <lokasi>` | Menampilkan cuaca laut dari BMKG |
-| `/produksi <tahun> [provinsi]` | Menampilkan statistik produksi ikan |
-| `/tanya <pertanyaan>` | Menjawab pertanyaan seputar ikan dan regulasi (dengan LLM) |
+Indonesia's marine and fisheries data is scattered across multiple government platforms (KKP, BMKG, BPS) — often inaccessible to the general public, fishermen, and researchers without technical expertise. JalaIn consolidates these into a single conversational interface, lowering the barrier to data access.
 
-Contoh:
-```bash
+---
+
+## ⚙️ Features
+
+| Command | Function |
+|---|---|
+| `/cuaca <lokasi>` | Real-time maritime weather from BMKG API |
+| `/produksi <tahun> [provinsi]` | Fisheries production statistics by region & year |
+| `/tanya <pertanyaan>` | AI-powered Q&A on fish species & fisheries regulations (LLM + RAG) |
+
+**Example queries:**
+```
 /cuaca Gresik
 /produksi 2023 Aceh
 /tanya ciri ikan bandeng
@@ -37,102 +35,129 @@ Contoh:
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## 🧠 Architecture
 
-- **Python** (core logic dan backend)
-- **Telegram Bot API** (interaksi pengguna)
-- **Google Gemini 1.5 Flash + LangChain** (untuk LLM retrieval)
-- **ChromaDB** (penyimpanan vektor RAG)
-- **SQLite** (database statistik perikanan)
-- **BMKG Public API** (cuaca maritim)
+```
+User (Telegram)
+      │
+      ▼
+ Telegram Bot API
+      │
+      ├──► /cuaca    → BMKG Public API  → Real-time weather response
+      │
+      ├──► /produksi → SQLite DB        → Structured fisheries statistics
+      │
+      └──► /tanya    → LangChain + Gemini 1.5 Flash
+                              │
+                              └──► ChromaDB (vector store)
+                                        │
+                                        └──► KKP regulations + species data (embedded docs)
+```
 
 ---
 
-## 🧱 Struktur Proyek
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Language | Python 3.x |
+| Bot interface | Telegram Bot API |
+| LLM | Google Gemini 1.5 Flash |
+| RAG orchestration | LangChain |
+| Vector database | ChromaDB |
+| Structured data | SQLite |
+| Weather data | BMKG Public API |
+
+---
+
+## 📁 Project Structure
 
 ```
-telegram_bot_kelautan/
+JalaIn_Telegram-Bot-Kelautan/
 │
 ├── bot/
-│   └── main_bot.py
+│   └── main_bot.py          ← Entry point, command routing
 │
 ├── handler/
-│   ├── cuaca_bmkg.py
-│   ├── data_ikan.py
-│   └── retrieval.py
+│   ├── cuaca_bmkg.py        ← BMKG API integration
+│   ├── data_ikan.py         ← SQLite query handler
+│   └── retrieval.py         ← RAG retrieval logic
 │
-├── data/              ← folder ini tidak disertakan di GitHub
-│   └── data_ikan.db   ← disediakan via Google Drive
+├── maritim_chroma/          ← ChromaDB vector embeddings (via Drive)
+├── data/                    ← Fisheries DB + source documents (via Drive)
 │
-├── maritim_chroma/    ← hasil embedding ChromaDB (juga via Drive)
-│
+├── chroma_setup.py          ← Embedding pipeline setup
+├── load_data.py             ← Data ingestion scripts
 ├── requirements.txt
-├── README.md
 └── .env.example
 ```
 
 ---
 
-## 💾 Data Besar & Embedding
+## 🚀 Getting Started
 
-Karena keterbatasan GitHub (maks. 100 MB per file), data besar tidak disertakan dalam repo. Silakan unduh manual:
-
-### 🔗 Link Google Drive:
-- **Statistik & JSON** (`data penting` + `data_ikan.db`):  
-  👉 https://drive.google.com/drive/folders/1EdxZ8O0fFjg3hdO9RtADBn37eZF6wA5W?usp=drive_link  
-- **Vektor Embedding ChromaDB (`maritim_chroma`)**:  
-  👉 https://drive.google.com/drive/folders/1zEmil5n2pLihNfwLTDf_jPQ6_4mDcKmj?usp=sharing
-
-Setelah diunduh, letakkan ke dalam folder `data/` dan `maritim_chroma/`.
-
----
-
-## 🚀 Cara Menjalankan Proyek
-
-1. **Clone Repository**
+**1. Clone the repository**
 ```bash
 git clone https://github.com/balqissalzahra/JalaIn_Telegram-Bot-Kelautan.git
 cd JalaIn_Telegram-Bot-Kelautan
 ```
 
-2. **Buat & Aktifkan Virtual Environment**
+**2. Set up environment**
 ```bash
 python -m venv rag_env
-rag_env\Scripts\activate   # Windows
-# atau
-source rag_env/bin/activate  # Linux/macOS
-```
+source rag_env/bin/activate   # Linux/macOS
+# or
+rag_env\Scripts\activate      # Windows
 
-3. **Install Requirements**
-```bash
 pip install -r requirements.txt
 ```
 
-4. **Atur Token Telegram**
-Buat file `.env` atau gunakan `.env.example`:
-```
-TELEGRAM_BOT_TOKEN=YOUR_TOKEN_HERE
-GOOGLE_API_KEY=YOUR_GEMINI_API_KEY
+**3. Configure API keys**
+```bash
+cp .env.example .env
+# Fill in your TELEGRAM_BOT_TOKEN and GOOGLE_API_KEY
 ```
 
-5. **Jalankan Bot**
+**4. Download data assets**
+
+Large files (ChromaDB embeddings + SQLite DB) are hosted on Google Drive due to GitHub's file size limits:
+- 📂 [Fisheries data & SQLite DB](https://drive.google.com/drive/folders/1EdxZ8O0fFjg3hdO9RtADBn37eZF6wA5W?usp=drive_link)
+- 📂 [ChromaDB vector embeddings](https://drive.google.com/drive/folders/1zEmil5n2pLihNfwLTDf_jPQ6_4mDcKmj?usp=sharing)
+
+Place downloaded folders into `data/` and `maritim_chroma/`.
+
+**5. Run the bot**
 ```bash
 python bot/main_bot.py
 ```
 
 ---
 
-## ✅ Status
+## 📊 Data Sources
 
-✅ Cuaca Maritim – BMKG API  
-✅ Statistik Produksi – SQLite  
-✅ QA Jenis Ikan dan Regulasi – LLM + Chroma  
-✅ Bot Telegram Aktif (via command)
+| Source | Data Type |
+|---|---|
+| KKP (Ministry of Marine Affairs) | Fisheries production statistics, regulations |
+| BMKG | Real-time maritime weather |
+| Government regulations | Fisheries policy documents (embedded via RAG) |
 
 ---
 
-## 🙏 Kontributor
+## 🔮 Potential Extensions
 
-**Balqis Alzahra**  
-Tugas Akhir Bootcamp Sanbercode 2025  
-[GitHub](https://github.com/balqissalzahra)
+- Web dashboard (Streamlit/Power BI) for fisheries trend visualization
+- Multi-language support (Bahasa + English)
+- Integration with BPS (Statistics Indonesia) for broader agromaritim data
+- Deployment on cloud (Railway / Render) for persistent uptime
+
+---
+
+## 👩 Author
+
+**Balqis Alzahra**
+Research & Data Analyst | Marine Science Graduate | AI Enthusiast
+
+Built as capstone project for Sanbercode AI Bootcamp (2025), combining domain expertise in marine policy with applied AI development.
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/balqissalzahra/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/balqissalzahra)
